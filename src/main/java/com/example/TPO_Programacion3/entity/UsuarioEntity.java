@@ -13,7 +13,6 @@ import static org.springframework.data.neo4j.core.schema.Relationship.Direction.
 public class UsuarioEntity {
    @Id
    private final String nombre;
-   private final Integer id;
 
    @Relationship(type = "SIGUE", direction = OUTGOING)
    private Set<UsuarioEntity> seguidos = new HashSet<>();
@@ -21,17 +20,12 @@ public class UsuarioEntity {
    @Relationship(type = "SIGUE", direction = INCOMING)
    private Set<UsuarioEntity> seguidores = new HashSet<>();
    
-   public UsuarioEntity(String nombre, Integer id) {
+   public UsuarioEntity(String nombre) {
       this.nombre = nombre;
-      this.id = id;
    }
    
    public String getNombre() {
       return nombre;
-   }
-
-   public Integer getId() {
-      return id;
    }
 
    public Set<UsuarioEntity> getSeguidos() {
