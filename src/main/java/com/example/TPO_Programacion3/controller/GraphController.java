@@ -31,4 +31,13 @@ public class GraphController {
         }
         return ResponseEntity.ok(path);
     }
+
+    @GetMapping("/searchBFS")
+    public ResponseEntity<List<String>> searchPathBFS(@RequestParam String start, @RequestParam String end) {
+        List<String> path = graphService.searchPathBFS(start, end);
+        if (path.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("No path found"));
+        }
+        return ResponseEntity.ok(path);
+    }
 }
