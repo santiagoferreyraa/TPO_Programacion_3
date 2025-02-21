@@ -23,9 +23,9 @@ public class GraphController {
         this.graphService = graphService;
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<String>> searchPath(@RequestParam String start, @RequestParam String end) {
-        List<String> path = graphService.searchPath(start, end);
+    @GetMapping("/searchDFS")
+    public ResponseEntity<List<String>> searchPathDFS(@RequestParam String start, @RequestParam String end) {
+        List<String> path = graphService.searchPathDFS(start, end);
         if (path.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("No path found"));
         }

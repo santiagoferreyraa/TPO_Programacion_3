@@ -1,8 +1,7 @@
 package com.example.TPO_Programacion3.service;
 
-import com.example.TPO_Programacion3.entity.RedSocialEntity;
 import com.example.TPO_Programacion3.entity.UsuarioEntity;
-import com.example.TPO_Programacion3.repositories.RedSocialRepository;
+import com.example.TPO_Programacion3.repositories.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,29 +10,28 @@ import java.util.*;
 
 @Service
 public class GraphService {
-    private final RedSocialRepository redSocialRepository;
+    private final UsuarioRepository usuarioRepository;
     private final Map<String, Set<String>> adjacencyList = new HashMap<>();
 
     @Autowired
-    public GraphService(RedSocialRepository redSocialRepository) {
-        this.redSocialRepository = redSocialRepository;
+    public GraphService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
         buildGraph();
     }
 
     private void buildGraph() {
-        redSocialRepository.findAll().collectList().subscribe(redesSociales -> {
-            for (RedSocialEntity redSocial : redesSociales) {
-                adjacencyList.putIfAbsent(redSocial.getNombre(), new HashSet<>());
-                for (UsuarioEntity usuario : redSocial.getUsuarios()) {
-                    adjacencyList.putIfAbsent(usuario.getNombre(), new HashSet<>());
-                    adjacencyList.get(redSocial.getNombre()).add(usuario.getNombre());
-                    adjacencyList.get(usuario.getNombre()).add(redSocial.getNombre());
+        usuarioRepository.findAll().collectList().subscribe(usuarios -> {
+            for (UsuarioEntity usuario : usuarios) {
+                adjacencyList.putIfAbsent(usuario.getNombre(), new HashSet<>());
+                for (UsuarioEntity seguido : usuario.getSeguidos()) {
+                    adjacencyList.get(usuario.getNombre()).add(seguido.getNombre());
+                    adjacencyList.putIfAbsent(seguido.getNombre(), new HashSet<>());
                 }
             }
         });
     }
 
-    public List<String> searchPath(String start, String end) {
+    public List<String> searchPathDFS(String start, String end) {
         Set<String> visited = new HashSet<>();
         List<String> path = new ArrayList<>();
         if (backtrack(start, end, visited, path)) {
@@ -89,7 +87,7 @@ public class GraphService {
             }
         }
 
-        return Collections.emptyList(); // No se encontró un camino
+        return Collections.emptyList();
     }
 
 }

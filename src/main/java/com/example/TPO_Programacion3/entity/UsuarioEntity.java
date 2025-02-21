@@ -7,7 +7,6 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import static org.springframework.data.neo4j.core.schema.Relationship.Direction.OUTGOING;
-import static org.springframework.data.neo4j.core.schema.Relationship.Direction.INCOMING;;
 
 @Node("Usuario")
 public class UsuarioEntity {
@@ -16,9 +15,6 @@ public class UsuarioEntity {
 
    @Relationship(type = "SIGUE", direction = OUTGOING)
    private Set<UsuarioEntity> seguidos = new HashSet<>();
-
-   @Relationship(type = "SIGUE", direction = INCOMING)
-   private Set<UsuarioEntity> seguidores = new HashSet<>();
    
    public UsuarioEntity(String nombre) {
       this.nombre = nombre;
@@ -34,13 +30,5 @@ public class UsuarioEntity {
 
    public void setSeguidos(Set<UsuarioEntity> seguidos) {
       this.seguidos = seguidos;
-   }
-
-   public Set<UsuarioEntity> getSeguidores() {
-      return seguidores;
-   }
-
-   public void setSeguidores(Set<UsuarioEntity> seguidores) {
-      this.seguidores = seguidores;
    }
 }
