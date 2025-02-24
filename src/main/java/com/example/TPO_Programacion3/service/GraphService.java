@@ -34,9 +34,11 @@ public class GraphService {
     public List<String> searchPathDFS(String start, String end) {
         Set<String> visited = new HashSet<>();
         List<String> path = new ArrayList<>();
+
         if (backtrack(start, end, visited, path)) {
             return path;
         }
+
         return Collections.emptyList();
     }
 
@@ -44,16 +46,22 @@ public class GraphService {
         if (!adjacencyList.containsKey(current)) {
             return false;
         }
+        
         path.add(current);
         visited.add(current);
+        
         if (current.equals(target)) {
             return true;
         }
+        
         for (String neighbor : adjacencyList.get(current)) {
-            if (!visited.contains(neighbor) && backtrack(neighbor, target, visited, path)) {
-                return true;
+            if (!visited.contains(neighbor)) {                
+                if (backtrack(neighbor, target, visited, path)) {
+                    return true;
+                }
             }
         }
+        
         path.remove(path.size() - 1);
         return false;
     }
